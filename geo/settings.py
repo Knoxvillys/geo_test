@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_gis',
     'django.contrib.gis',
+    'django_filters',
     'geodata',
 ]
 
