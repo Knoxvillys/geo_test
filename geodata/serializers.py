@@ -35,3 +35,21 @@ class PointSerializer(GeoFeatureModelSerializer):
         geo_field = 'geometry'
         id_field = False
         fields = ['geometry', 'id', 'name']
+
+
+class GpxSerializer(Serializer):
+    name = CharField(allow_blank=True)
+    geom_type = CharField() # я бы выбрал ChoiceField, но задание просит другое
+    file = FileField()
+
+    def validate(self, data):
+        if data['geom_type'] not in ('LineString', 'Polygon',  'MultiPoint'):
+            raise ValidationError("Дружок правильно выбери LineString, Polygon или MultiPoint")
+
+        elif str(data['file'])[-4:] != '.gpx':
+            raise ValidationError("Ожидается  формат .gpx")
+
+        return data
+
+    class Meta:
+        fields = ['name', 'geom_type', 'file']

@@ -5,8 +5,9 @@ from rest_framework_gis.filters import DistanceToPointFilter # Фильтр ра
 
 
 from .models import Polygon, LineString, Point
-from .serializers import PolygonSerializer, LineStringSerializer, PointSerializer
+from .serializers import PolygonSerializer, LineStringSerializer, PointSerializer, GpxSerializer
 from .Mixin import CreateListModelMixin
+from .pars.gpx import LineString, Poligon, Point
 
 
 
@@ -48,3 +49,36 @@ class PointView(CreateListModelMixin, viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['name']
     search_fields = ['name']
+
+
+class FileViewSet(CreateModelMixin, viewsets.ViewSet):
+    serializer_class = GpxSerializer
+
+    def create(self, request, *args, **kwargs):
+
+        serializer = self.serializer_class(data=request.data)
+
+        name = serializer.data.get('name')
+        geom_type = serializer.data.get('geom_type')
+        file = request.FILES.get('file_upload')
+        # проверим что за тип введен
+        if geom_type == 'LineString':
+            serializer = LineStringSerializer(
+                data=LineString(file).abc_method_geometry()
+            )
+
+        elif geom_type == 'Polygon':
+            serializer = PolygonSerializer(
+                data=Poligon(file).abc_method_geometry()
+            )
+
+        elif geom_type == 'MultiPoint':
+            serializer = PointSerializer(
+                data=Point(file, name=name).abc_method_geometry(),
+                many=True
+            )
+
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
