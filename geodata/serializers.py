@@ -15,8 +15,11 @@ class PolygonSerializer(GeoFeatureModelSerializer):
     
     class Meta:
         model = Polygon
-        geo_field = "geometry" # требуется для определения GeoFeatureModelSerializer
-        id_field = False # Первичный ключ модели (обычно атрибут «id») автоматически используется в качестве id поля каждого объекта GeoJSON Feature Object .
+        # требуется для определения GeoFeatureModelSerializer
+        geo_field = "geometry"
+        # Первичный ключ модели (обычно атрибут «id») автоматически используется в качестве id 
+        # поля каждого объекта GeoJSON Feature Object.
+        id_field = False
         fields = ['geometry', 'id', 'name', 'points']
 
 
@@ -39,7 +42,8 @@ class PointSerializer(GeoFeatureModelSerializer):
 
 class GpxSerializer(Serializer):
     name = CharField(allow_blank=True)
-    geom_type = CharField() # я бы выбрал ChoiceField, но задание просит другое
+    # я бы выбрал ChoiceField, но задание просит другое
+    geom_type = CharField()
     file = FileField()
 
     def validate(self, data):

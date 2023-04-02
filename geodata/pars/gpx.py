@@ -1,24 +1,24 @@
+"""
+По идее это обычный xml но внутри как будь то абстракция 1. tracks 2. segments 3. points
+gpx = gpxpy.parse(open('Точки.gpx'))
+
+print("{} track(s)".format(len(gpx.tracks)))
+track = gpx.tracks[0]
+
+print("{} segment(s)".format(len(track.segments)))
+segment = track.segments[0]
+
+print("{} point(s)".format(len(segment.points)))
+результат
+1 track(s) <- в них лежат типы как в xml
+               |
+1 segment(s) <-
+              |
+15 point(s) <-
+"""
 import gpxpy.gpx
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-
-
-# поидеи это обычный xml но внутри как будь то абстракция 1. tracks 2. segments 3. points
-#gpx = gpxpy.parse(open('Точки.gpx'))
-
-#print("{} track(s)".format(len(gpx.tracks)))
-#track = gpx.tracks[0]
-
-#print("{} segment(s)".format(len(track.segments)))
-#segment = track.segments[0]
-
-#print("{} point(s)".format(len(segment.points)))
-# результат
-# 1 track(s) <- в них лежат типы как в xml
-#                |
-# 1 segment(s) <-
-#               |
-# 15 point(s) <-
 
 
 # декоратор помогает аннотировать типы, но короче, см. в кингу "декораторы"

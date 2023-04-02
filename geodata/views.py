@@ -24,7 +24,8 @@ class PolygonView(viewsets.ModelViewSet):
     search_fields = ['name']
 
     distance_filter_field = 'geometry'
-    distance_filter_convert_meters = True #Для того чтобы преобразовать входное расстояние из метров в градусы
+    # Для того чтобы преобразовать входное расстояние из метров в градусы
+    distance_filter_convert_meters = True
 
 
 class LineStringView(ListCreateAPIView):
