@@ -31,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s*eqcafkm&z6ic6yq5)km+7qchmp5!z9gp!j*e3c(_p#wo_lre'
+SECRET_KEY = 'django-insecure-zm_uk)l@5q)xn#vi8%hx!rvc=uy3zze(b*hrk$xvq=g&=tbt^k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -91,14 +91,19 @@ WSGI_APPLICATION = 'geo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'test_geo',
-        'USER': 'geo',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        
-        'PORT': '5432'
-    },
+        'ENGINE': os.environ.get("SQL_ENGINE"),
+        # 'django.contrib.gis.db.backends.postgis',
+        'NAME': os.environ.get("SQL_DATABASE"),
+        # 'gis_db',
+        'USER': os.environ.get("SQL_USER"),
+        # 'gis_user',
+        'HOST': os.environ.get("SQL_HOST"),
+        # 'localhost',
+        'PASSWORD': os.environ.get("SQL_PASSWORD"),
+        # 'gis_user',
+        'PORT': os.environ.get("SQL_PORT"),
+        # '5432'
+    }
 }
 
 
@@ -149,4 +154,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
 # GEOS_LIBRARY_PATH = '/opt/homebrew/opt/geos/lib/libgeos_c.dylib'
-GDAL_LIBRARY_PATH = "C:\\OSGeo4W\\bin\\gdal306.dll"
+# GDAL_LIBRARY_PATH = "C:\\OSGeo4W\\bin\\gdal306.dll"

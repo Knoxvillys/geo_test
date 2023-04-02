@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+  web:
+#   Создаем контейнер с нашим приложением из докерфайла
+    build: .
+    ports:
+      - 8000:8000
+#   Запускаем сервер
+    command: python /srv/html/geo/manage.py runserver
+#   Советую делать волюм с кодом, тогда не придется
+#   перебилдивать контейнер каждый раз
+    volumes:
+      - ../:/srv/html/app/
+#   Поднимать только после БД
+    depends_on:
+      - db
+
+
+
+  db:
+#   Используем официальные postgis-image
+    image: postgis/postgis:latest
+
+    volumes:
+      - /usr/local/var/postgres:/var/lib/postgres/data/pgdata
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db_name
+# Незабывай ставить " "
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:

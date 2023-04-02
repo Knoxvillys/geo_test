@@ -1,13 +1,14 @@
-from rest_framework.generics import RetrieveUpdateAPIView, ListCreateAPIView, RetrieveDestroyAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, viewsets
+from rest_framework import filters, viewsets, status
 from rest_framework_gis.filters import DistanceToPointFilter # Фильтр расстояния до точки
+from rest_framework.mixins import CreateModelMixin
+from rest_framework.response import Response
 
 
 from .models import Polygon, LineString, Point
 from .serializers import PolygonSerializer, LineStringSerializer, PointSerializer, GpxSerializer
 from .Mixin import CreateListModelMixin
-from .pars.gpx import LineString, Poligon, Point
+from .pars.gpx import LineStringGpx, PoligonGpx, PointGpx
 
 
 
@@ -28,7 +29,7 @@ class PolygonView(viewsets.ModelViewSet):
     distance_filter_convert_meters = True
 
 
-class LineStringView(ListCreateAPIView):
+class LineStringView(viewsets.ModelViewSet):
     """
 
     """
@@ -65,17 +66,17 @@ class FileViewSet(CreateModelMixin, viewsets.ViewSet):
         # проверим что за тип введен
         if geom_type == 'LineString':
             serializer = LineStringSerializer(
-                data=LineString(file).abc_method_geometry()
+                data=LineStringGpx(file).abc_method_geometry()
             )
 
         elif geom_type == 'Polygon':
             serializer = PolygonSerializer(
-                data=Poligon(file).abc_method_geometry()
+                data=PoligonGpx(file).abc_method_geometry()
             )
 
         elif geom_type == 'MultiPoint':
             serializer = PointSerializer(
-                data=Point(file, name=name).abc_method_geometry(),
+                data=PointGpx(file, name=name).abc_method_geometry(),
                 many=True
             )
 

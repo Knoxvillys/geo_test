@@ -63,7 +63,7 @@ class GeoItems(ABC):
             pass
 
 
-class LineString(GeoItems):
+class LineStringGpx(GeoItems):
     def abc_method_geometry(self):
         data = self.parser(self.file).pars()
         line_string_data = {
@@ -77,7 +77,7 @@ class LineString(GeoItems):
         return line_string_data
 
 
-class Poligon(GeoItems):
+class PoligonGpx(GeoItems):
     def abc_method_geometry(self):
         data = self.parser(self.file).pars()
         polygon_data = {
@@ -91,7 +91,7 @@ class Poligon(GeoItems):
         return polygon_data
 
 
-class Point(GeoItems):
+class PointGpx(GeoItems):
     def abc_method_geometry(self):
         data = self.parser(self.file).pars()
         point_list = ()

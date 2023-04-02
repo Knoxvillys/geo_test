@@ -1,4 +1,4 @@
-from rest_framework import serializers, SlugRelatedField
+from rest_framework.serializers import Serializer, SlugRelatedField, CharField, FileField, ValidationError
 from rest_framework_gis.serializers import GeoFeatureModelSerializer # сериализатор для GeoJISON
 
 from .models import Polygon, LineString, Point
