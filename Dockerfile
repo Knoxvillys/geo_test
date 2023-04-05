@@ -22,15 +22,16 @@
 #WORKDIR /srv/html/geo
 
 FROM python:3.7-slim-buster
-WORKDIR /usr/src/app
+WORKDIR /srv/html/geo
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 # Обновляем пакетный менеджер
 RUN apt-get update -y && apt-get upgrade -y
 
 # Ставим зависимости GDAL, PROJ
-RUN apt-get update \
-    && apt-get install -y binutils libproj-dev gdal-bin python-gdal python3-gdal
+RUN apt-get install -y gdal-bin libgdal-dev
+RUN apt-get install -y python3-gdal
+RUN apt-get install -y binutils libproj-dev
 
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
