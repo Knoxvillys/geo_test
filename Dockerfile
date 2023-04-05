@@ -39,5 +39,5 @@ RUN pip install -r requirements.txt
 COPY . .
 
 RUN chmod 755 entrypoint.sh
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["/srv/html/geo/entrypoint.sh"]
 CMD ["run"]
