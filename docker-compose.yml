@@ -1,45 +1,85 @@
-version: '3.7'
+#version: '3.7'
+#
+#services:
+#  web:
+##   Создаем контейнер с нашим приложением из докерфайла
+#    build: .
+#    ports:
+#      - 8000:8000
+##   Запускаем сервер
+#    command: python /srv/html/geo/manage.py runserver
+##   Советую делать волюм с кодом, тогда не придется
+##   перебилдивать контейнер каждый раз
+#    volumes:
+#      - ../:/srv/html/app/
+##   Поднимать только после БД
+#    env_file:
+#      - .env.dev
+#    depends_on:
+#      - db
+#
+#
+#
+#  db:
+##   Используем официальные postgis-image
+#    image: postgres:12.0-alpine
+#
+#    volumes:
+#      - /usr/local/var/postgres:/var/lib/postgres/data/pgdata
+#    environment:
+#      POSTGRES_USER: "gis_user"
+#      POSTGRES_PASSWORD: "root"
+#      POSTGRES_DB: "/var/lib/postgres/data/pgdata"
+## Незабывай ставить " "
+#    ports:
+#      - "5432:5432"
+#    env_file:
+#      - .env.dev
+#    restart:
+#      always
+##    expose:
+##      - 5432
+#
+#
+#volumes:
+#  postgres_data:
 
+version: '3.1'
 services:
-  web:
-#   Создаем контейнер с нашим приложением из докерфайла
-    build: .
-    ports:
-      - 8000:8000
-#   Запускаем сервер
-    command: python /srv/html/geo/manage.py runserver
-#   Советую делать волюм с кодом, тогда не придется
-#   перебилдивать контейнер каждый раз
-    volumes:
-      - ../:/srv/html/app/
-#   Поднимать только после БД
-    env_file:
-      - .env.dev
-    depends_on:
-      - db
+    web:
+        build: ./
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+          - ./:/usr/src/app/
+        ports:
+          - 8000:8000
+
+        env_file:
+            - ./.env.dev
+        depends_on:
+            - postgis
+
+        networks:
+            - gis_net
+
+    db:
+        image: postgis/postgis:15-3.3
+        container_name: postgis
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: "gis_db"
+            POSTGRES_USER: "gis_user"
+            POSTGRES_PASSWORD: "gis_user"
+            PGDATA: "/var/lib/postgresql/data/pgdata"
+        volumes:
+            - ./:/var/lib/postgresql/data
+
+        networks:
+            - gis_net
 
 
 
-  db:
-#   Используем официальные postgis-image
-    image: postgres:12.0-alpine
-
-    volumes:
-      - /usr/local/var/postgres:/var/lib/postgres/data/pgdata
-    environment:
-      POSTGRES_USER: "gis_user"
-      POSTGRES_PASSWORD: "root"
-      POSTGRES_DB: "/var/lib/postgres/data/pgdata"
-# Незабывай ставить " "
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env.dev
-    restart:
-      always
-#    expose:
-#      - 5432
-
-
-volumes:
-  postgres_data:
+networks:
+  gis_net:
+    driver: bridge
