@@ -2,6 +2,8 @@ version: '3.7'
 services:
     web:
         build: ./
+        environment:
+            - DOCKER_DEFAULT_PLATFORM=linux/amd64
         command: python manage.py runserver 0.0.0.0:8000
         volumes:
           - ./:/srv/html/geo
